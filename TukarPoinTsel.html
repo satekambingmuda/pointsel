@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Selamat Sempro, Sheren!</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #004d00;
+        text-align: center;
+        position: relative;
+    }
+    h1 {
+        font-size: 3.5em;
+        margin-bottom: 0.2em;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: fadeScaleIn 1s forwards 0.3s;
+        text-shadow: 0 0 10px #0a7a0a;
+    }
+    p {
+        font-size: 1.6em;
+        margin: 0 0 1.5em 0;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: fadeScaleIn 1s forwards 0.9s;
+    }
+    button {
+        background: #2ecc71;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 12px;
+        cursor: pointer;
+        color: white;
+        box-shadow: 0 6px #27ae60;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: fadeScaleIn 1s forwards 1.5s;
+        user-select: none;
+    }
+    button:hover {
+        background: #27ae60;
+        box-shadow: 0 2px #1e8449;
+        transform: scale(1.1);
+        animation: shake 0.5s;
+    }
+    .balloon {
+        position: absolute;
+        bottom: -80px;
+        border-radius: 50% / 60%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        animation-timing-function: ease-in-out;
+        opacity: 0.9;
+    }
+    .balloon::after {
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 20px;
+        background: #444;
+        left: 50%;
+        bottom: -20px;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+    /* Confetti styles */
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        opacity: 0.8;
+        top: 0;
+        pointer-events: none;
+        z-index: 9999;
+        transform-origin: center center;
+        will-change: transform, opacity;
+        border-radius: 3px;
+    }
+    @keyframes floatUp {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+    @keyframes swaySide {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(20px); }
+    }
+    @keyframes fadeScaleIn {
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-8px); }
+        40%, 80% { transform: translateX(8px); }
+    }
+    /* Foto style */
+    .photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        border: 4px solid #27ae60;
+    }
+</style>
+</head>
+<body>
+    <img src= "https://i.imgur.com/FEyKpmU.jpeg" alt="Foto Sheren" class="photo" />
+    <h1>🎉 Selamat Sempro, Sheren!</h1>
+    <p>Semoga lancar sampai skripsi selesai dan cepat wisuda! 💪</p>
+    <button id="btnCelebrate">Rayakan 🎈</button>
+
+<script>
+    const button = document.getElementById('btnCelebrate');
+
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function createBalloon() {
+        const balloon = document.createElement('div');
+        balloon.classList.add('balloon');
+        const size = randomInt(30, 50);
+        balloon.style.width = size + 'px';
+        balloon.style.height = size * 1.3 + 'px';
+        balloon.style.left = Math.random() * 100 + 'vw';
+        const hue = Math.random() * 360;
+        balloon.style.background = `radial-gradient(circle at 30% 30%, hsl(${hue}, 80%, 70%), hsl(${hue}, 90%, 40%))`;
+        const duration = randomInt(4000, 7000);
+        balloon.style.animation = `floatUp ${duration}ms ease-in-out forwards, swaySide ${randomInt(3000, 6000)}ms ease-in-out infinite`;
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), duration);
+    }
+
+    function createConfetti() {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        const size = randomInt(6, 12);
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        confetti.style.top = '-20px';
+        document.body.appendChild(confetti);
+
+        let start = null;
+        let duration = randomInt(3000, 5000);
+        let angle = Math.random() * 360;
+
+        function animate(timestamp) {
+            if (!start) start = timestamp;
+            let progress = timestamp - start;
+            let y = progress / duration * window.innerHeight;
+            let sway = Math.sin(progress / 200) * 30;
+            confetti.style.transform = `translate(${sway}px, ${y}px) rotate(${angle + progress / 10}deg)`;
+            confetti.style.opacity = 1 - progress / duration;
+            if (progress < duration) {
+                requestAnimationFrame(animate);
+            } else {
+                confetti.remove();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    button.addEventListener('click', () => {
+        for(let i = 0; i < 30; i++) {
+            setTimeout(createBalloon, i * 200);
+        }
+        for(let i = 0; i < 100; i++) {
+            setTimeout(createConfetti, i * 50);
+        }
+        button.disabled = true;
+        button.textContent = '🎉 Salam buat Mas Jian 🎉';
+    });
+</script>
+</body>
+</html>
